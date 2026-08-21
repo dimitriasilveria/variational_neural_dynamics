@@ -1,5 +1,6 @@
 import csv
 from functools import partial
+from pathlib import Path
 from typing import Optional
 import numpy as np
 from matplotlib import pyplot as plt
@@ -34,12 +35,16 @@ class EnvState(env_base.EnvState):
         quadrotor_state: physical state of the drone.
         last_actions: history of actions used to simulate control latency.
         last_quadrotor_states: history of previous physical states.
+        wind_velocity: wind velocity selected for the current episode.
+        latent_z: latent code paired with the selected wind velocity.
     """
     time: float
     step_idx: int
     quadrotor_state: QuadrotorState
     last_actions: jax.Array
     last_quadrotor_states: QuadrotorState
+    wind_velocity: jax.Array
+    latent_z: jax.Array
 
 
 class HoveringStateEnv(env_base.Env[EnvState]):
@@ -117,13 +122,34 @@ class HoveringStateEnv(env_base.Env[EnvState]):
         self.num_last_quad_states = num_last_quad_states
         self.margin = margin
 
+        # Load the immutable wind/latent associations rather than regenerating
+        # latents when an environment is constructed.
+        table_path = Path(__file__).with_name("wind_z_table.csv")
+        wind_z_table = np.loadtxt(
+            table_path, delimiter=",", skiprows=1, dtype=np.float32
+        )
+        if wind_z_table.shape != (17, 15):
+            raise ValueError(
+                f"Expected a (17, 15) wind-z table, got {wind_z_table.shape}"
+            )
+        if np.unique(wind_z_table, axis=0).shape[0] != 17:
+            raise ValueError("Every row in the wind-z table must be unique")
+        self.wind_z_table = jnp.asarray(wind_z_table)
+        self.num_wind_conditions = self.wind_z_table.shape[0]
+
     @partial(jax.jit, static_argnums=(0,))
     def reset(
         self, key, state: Optional[EnvState] = None
     ) -> tuple[EnvState, jax.Array]:
         """Resets environment state with randomized quadrotor pose and velocity."""
 
-        key_p, key_R, key_v, key_omega, key_dr = jax.random.split(key, 5)
+        key_p, key_R, key_v, key_omega, key_dr, key_wind = jax.random.split(key, 6)
+
+        # Keep the selected association fixed for the complete episode.
+        pair_idx = jax.random.randint(
+            key_wind, shape=(), minval=0, maxval=self.num_wind_conditions
+        )
+        wind_z_pair = self.wind_z_table[pair_idx]
         
         # randomize starting position within the world box
         p = jax.random.uniform(
@@ -159,6 +185,8 @@ class HoveringStateEnv(env_base.Env[EnvState]):
             quadrotor_state=quadrotor_state,
             last_actions=last_actions,
             last_quadrotor_states=last_quadrotor_states,
+            wind_velocity=wind_z_pair[:3],
+            latent_z=wind_z_pair[3:],
         )
 
         return state, self._get_obs(state)
