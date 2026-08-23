@@ -36,6 +36,7 @@ class HoveringFeaturesEnv(HoveringStateEnv):
         margin=0.0,
         hover_height=1.0,
         hover_target=None,
+        apply_hidden_acceleration=True,
     ):
         """Initializes the feature-based environment with a downward-looking camera."""
         super().__init__(
@@ -53,6 +54,7 @@ class HoveringFeaturesEnv(HoveringStateEnv):
             margin=margin,
             hover_height=hover_height,
             hover_target=hover_target,
+            apply_hidden_acceleration=apply_hidden_acceleration,
         )
         # setup camera model
         self.cam = DoubleSphereCamera.from_name(CameraNames.EXAMPLE_CAM)
@@ -88,16 +90,26 @@ class HoveringFeaturesEnv(HoveringStateEnv):
         dt_1 = self.delay - (self.num_last_actions - 2) * self.dt
         action_1 = last_actions[0]
         f_1, omega_1 = action_1[0], action_1[1:]
-        quadrotor_state = self.quadrotor.step(
-            state.quadrotor_state, f_1, omega_1, res_model_params, dt_1
+        quadrotor_state = self._step_dynamics_with_hidden_acceleration(
+            state.quadrotor_state,
+            f_1,
+            omega_1,
+            res_model_params,
+            state.hidden_acceleration,
+            dt_1,
         )
 
         if dt_1 < self.dt:
             dt_2 = self.dt - dt_1
             action_2 = last_actions[1]
             f_2, omega_2 = action_2[0], action_2[1:]
-            quadrotor_state = self.quadrotor.step(
-                quadrotor_state, f_2, omega_2, res_model_params, dt_2
+            quadrotor_state = self._step_dynamics_with_hidden_acceleration(
+                quadrotor_state,
+                f_2,
+                omega_2,
+                res_model_params,
+                state.hidden_acceleration,
+                dt_2,
             )
 
         # update rolling buffer of physical states for feature projection history

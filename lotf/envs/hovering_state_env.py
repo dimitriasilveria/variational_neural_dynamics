@@ -35,15 +35,15 @@ class EnvState(env_base.EnvState):
         quadrotor_state: physical state of the drone.
         last_actions: history of actions used to simulate control latency.
         last_quadrotor_states: history of previous physical states.
-        wind_velocity: wind velocity selected for the current episode.
-        latent_z: latent code paired with the selected wind velocity.
+        hidden_acceleration: constant external acceleration for the current episode.
+        latent_z: latent code paired with the selected hidden acceleration.
     """
     time: float
     step_idx: int
     quadrotor_state: QuadrotorState
     last_actions: jax.Array
     last_quadrotor_states: QuadrotorState
-    wind_velocity: jax.Array
+    hidden_acceleration: jax.Array
     latent_z: jax.Array
 
 
@@ -69,6 +69,7 @@ class HoveringStateEnv(env_base.Env[EnvState]):
         margin=0.0,
         hover_height=1.0,
         hover_target=None,
+        apply_hidden_acceleration=True,
     ):  
         """Initializes environment parameters, quadrotor physics, and goal targets."""
         
@@ -121,6 +122,8 @@ class HoveringStateEnv(env_base.Env[EnvState]):
 
         self.num_last_quad_states = num_last_quad_states
         self.margin = margin
+
+        self.apply_hidden_acceleration = apply_hidden_acceleration
 
         # Load the immutable wind/latent associations rather than regenerating
         # latents when an environment is constructed.
@@ -185,7 +188,7 @@ class HoveringStateEnv(env_base.Env[EnvState]):
             quadrotor_state=quadrotor_state,
             last_actions=last_actions,
             last_quadrotor_states=last_quadrotor_states,
-            wind_velocity=wind_z_pair[:3],
+            hidden_acceleration=wind_z_pair[:3],
             latent_z=wind_z_pair[3:],
         )
 
@@ -221,8 +224,13 @@ class HoveringStateEnv(env_base.Env[EnvState]):
         dt_1 = self.delay - (self.num_last_actions - 2) * self.dt
         action_1 = last_actions[0]
         f_1, omega_1 = action_1[0], action_1[1:]
-        quadrotor_state = self.quadrotor.step(
-            state.quadrotor_state, f_1, omega_1, res_model_params, dt_1
+        quadrotor_state = self._step_dynamics_with_hidden_acceleration(
+            state.quadrotor_state,
+            f_1,
+            omega_1,
+            res_model_params,
+            state.hidden_acceleration,
+            dt_1,
         )
 
         # complete the remaining time step with the subsequent action
@@ -230,8 +238,13 @@ class HoveringStateEnv(env_base.Env[EnvState]):
             dt_2 = self.dt - dt_1
             action_2 = last_actions[1]
             f_2, omega_2 = action_2[0], action_2[1:]
-            quadrotor_state = self.quadrotor.step(
-                quadrotor_state, f_2, omega_2, res_model_params, dt_2
+            quadrotor_state = self._step_dynamics_with_hidden_acceleration(
+                quadrotor_state,
+                f_2,
+                omega_2,
+                res_model_params,
+                state.hidden_acceleration,
+                dt_2,
             )
 
         next_state = state.replace(
@@ -247,6 +260,32 @@ class HoveringStateEnv(env_base.Env[EnvState]):
         truncated = jnp.greater_equal(next_state.step_idx, self.max_steps_in_episode)
 
         return EnvTransition(next_state, obs, reward, terminated, truncated, dict())
+
+    def _step_dynamics_with_hidden_acceleration(
+        self,
+        quadrotor_state: QuadrotorState,
+        thrust: jax.Array,
+        body_rates: jax.Array,
+        res_model_params: FrozenDict,
+        hidden_acceleration: jax.Array,
+        dt: jax.Array,
+    ) -> QuadrotorState:
+        """Applies the paper's constant hidden translational acceleration.
+
+        The episode-level condition ``w`` is expressed in the world frame and
+        enters equation (2) of the supplement directly as ``v_dot += w``.
+        """
+        next_quadrotor_state = self.quadrotor.step(
+            quadrotor_state, thrust, body_rates, res_model_params, dt
+        )
+        if not self.apply_hidden_acceleration:
+            return next_quadrotor_state
+
+        return next_quadrotor_state.replace(
+            p=next_quadrotor_state.p + 0.5 * hidden_acceleration * dt**2,
+            v=next_quadrotor_state.v + hidden_acceleration * dt,
+            acc=next_quadrotor_state.acc + hidden_acceleration,
+        )
 
     def _get_reward(
         self, last_state: EnvState, next_state: EnvState
