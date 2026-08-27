@@ -1,0 +1,198 @@
+2026-08-27 11:35:49,208 INFO    MainThread:707324 [wandb_init.py:setup_run_log_directory():739] Logging user logs to /home/dimitria/PhD_codes/learning_on_the_fly/examples/state_hovering/wandb/run-20260827_113549-xvx8kmfr/logs/debug.log
+2026-08-27 11:35:49,209 INFO    MainThread:707324 [wandb_init.py:setup_run_log_directory():740] Logging internal logs to /home/dimitria/PhD_codes/learning_on_the_fly/examples/state_hovering/wandb/run-20260827_113549-xvx8kmfr/logs/debug-internal.log
+2026-08-27 11:35:49,209 INFO    MainThread:707324 [wandb_init.py:init():783] calling init triggers
+2026-08-27 11:35:49,209 INFO    MainThread:707324 [wandb_init.py:init():788] wandb.init called with sweep_config: {}
+config: {'seed': 0, 'num_continual_rounds': 10000, 'rollouts_per_collection_round': 256, 'dynamics_updates_per_round': 1000, 'context_length': 20, 'dynamics_horizon': 110, 'latent_dim': 12, 'replay_batch_size': 128, 'dynamics_learning_rate': 0.0003, 'lambda_rec': 1e-07, 'lambda_mmd_max': 9e-05, 'mmd_kernel_sigma': 2.0, 'mmd_warmup_updates': 800, 'mmd_ramp_updates': 2500, 'residual_huber_delta': 1.0, 'policy_num_envs': 512, 'policy_updates_per_round': 1, 'policy_rollout_horizon': 250, 'policy_learning_rate': 0.001, 'policy_discount': 1.0, 'reward_huber_delta': 1.0, 'sim_dt': 0.02, 'control_delay': 0.04, '_wandb': {}}
+2026-08-27 11:35:49,414 INFO    MainThread:707324 [wandb_init.py:init():831] starting backend
+2026-08-27 11:35:49,414 INFO    MainThread:707324 [wandb_init.py:init():846] sending inform_init request
+2026-08-27 11:35:50,880 INFO    MainThread:707324 [wandb_init.py:init():851] backend started and connected
+2026-08-27 11:35:50,881 INFO    MainThread:707324 [wandb_run.py:_label_probe_notebook():1221] probe notebook
+2026-08-27 11:35:50,882 INFO    MainThread:707324 [wandb_init.py:init():921] updated telemetry
+2026-08-27 11:35:50,886 INFO    MainThread:707324 [wandb_init.py:init():944] communicating run to backend with 90.0 second timeout
+2026-08-27 11:35:51,466 INFO    MainThread:707324 [wandb_init.py:init():981] starting run threads in backend
+2026-08-27 11:35:51,561 INFO    MainThread:707324 [wandb_run.py:_console_start():2545] atexit reg
+2026-08-27 11:35:51,561 INFO    MainThread:707324 [wandb_run.py:_redirect():2395] redirect: wrap_raw
+2026-08-27 11:35:51,561 INFO    MainThread:707324 [wandb_run.py:_redirect():2464] Wrapping output streams.
+2026-08-27 11:35:51,561 INFO    MainThread:707324 [wandb_run.py:_redirect():2487] Redirects installed.
+2026-08-27 11:35:51,562 INFO    MainThread:707324 [wandb_init.py:init():1019] run started, returning control to user process
+2026-08-27 11:36:50,536 INFO    wandb-AsyncioManager-main:707324 [service_client.py:_forward_responses():122] [no run ID] Reached EOF.
+2026-08-27 11:36:50,536 INFO    wandb-AsyncioManager-main:707324 [mailbox.py:close():154] [no run ID] Closing mailbox, abandoning 3 handles.
+2026-08-27 11:36:50,536 ERROR   wandb-AsyncioManager-main:707324 [asyncio_manager.py:fn_wrap_exceptions():197] Uncaught exception in run_soon callback.
+Traceback (most recent call last):
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 195, in fn_wrap_exceptions
+    await fn()
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/run_messages.py", line 90, in loop
+    await asyncio_compat.race(
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 279, in race
+    async with open_task_group(race=True) as tg:
+  File "/usr/lib/python3.12/contextlib.py", line 217, in __aexit__
+    await anext(self.gen)
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 241, in open_task_group
+    await task_group._wait_all(race=race, timeout=exit_timeout)
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 181, in _wait_all
+    raise exc
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 314, in __step_run_and_handle_result
+    result = coro.send(None)
+             ^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/run_messages.py", line 113, in _print_all
+    result = await handle.wait_async(timeout=None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/mailbox/mailbox_handle.py", line 127, in wait_async
+    response = await self._handle.wait_async(timeout=timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/mailbox/response_handle.py", line 123, in wait_async
+    raise HandleAbandonedError()
+wandb.sdk.mailbox.mailbox_handle.HandleAbandonedError
+2026-08-27 11:36:51,567 ERROR   wandb-AsyncioManager-main:707324 [asyncio_manager.py:fn_wrap_exceptions():197] Uncaught exception in run_soon callback.
+Traceback (most recent call last):
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 195, in fn_wrap_exceptions
+    await fn()
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/run_stopping.py", line 87, in loop
+    should_stop = await self._check_should_stop()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/run_stopping.py", line 115, in _check_should_stop
+    handle = await self._interface.deliver_async(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/interface/interface_sock.py", line 58, in deliver_async
+    handle = await self._client.deliver(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/service/service_client.py", line 57, in deliver
+    handle = self._mailbox.require_response(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/mailbox/mailbox.py", line 89, in require_response
+    raise MailboxClosedError()
+wandb.sdk.mailbox.mailbox.MailboxClosedError
+2026-08-27 13:44:42,965 ERROR   MainThread:707324 [identity.py:_resolve():85] [no run ID] Failed to resolve the session identity.
+Traceback (most recent call last):
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/identity.py", line 81, in _resolve
+    response = self._service_api.authenticate()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/apis/public/service_api.py", line 219, in authenticate
+    resp = self.send_api_request(req, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/apis/public/service_api.py", line 102, in send_api_request
+    session = self._get_api_session()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/apis/public/service_api.py", line 77, in _get_api_session
+    response = service_connection.api_init_request(self._settings.to_proto())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/service/service_connection.py", line 179, in api_init_request
+    handle = self._asyncer.run(lambda: self._client.deliver(request))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 145, in run
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 314, in __step_run_and_handle_result
+    result = coro.send(None)
+             ^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 238, in _wrap
+    return await fn()
+           ^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/service/service_client.py", line 57, in deliver
+    handle = self._mailbox.require_response(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/mailbox/mailbox.py", line 89, in require_response
+    raise MailboxClosedError()
+wandb.sdk.mailbox.mailbox.MailboxClosedError
+2026-08-27 13:44:42,969 ERROR   MainThread:707324 [identity.py:_resolve():85] [no run ID] Failed to resolve the session identity.
+Traceback (most recent call last):
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/identity.py", line 81, in _resolve
+    response = self._service_api.authenticate()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/apis/public/service_api.py", line 219, in authenticate
+    resp = self.send_api_request(req, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/apis/public/service_api.py", line 102, in send_api_request
+    session = self._get_api_session()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/apis/public/service_api.py", line 77, in _get_api_session
+    response = service_connection.api_init_request(self._settings.to_proto())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/service/service_connection.py", line 179, in api_init_request
+    handle = self._asyncer.run(lambda: self._client.deliver(request))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 145, in run
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 314, in __step_run_and_handle_result
+    result = coro.send(None)
+             ^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 238, in _wrap
+    return await fn()
+           ^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/service/service_client.py", line 57, in deliver
+    handle = self._mailbox.require_response(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/mailbox/mailbox.py", line 89, in require_response
+    raise MailboxClosedError()
+wandb.sdk.mailbox.mailbox.MailboxClosedError
+2026-08-27 13:44:42,975 INFO    MainThread:707324 [wandb_run.py:_finish():2316] finishing run dimitriasilveria-ds-queen-s-university/continual-vnd-state-hovering/xvx8kmfr
+2026-08-27 13:44:42,976 ERROR   MainThread:707324 [wandb_init.py:init():1554] [no run ID] error in wandb.init()
+Traceback (most recent call last):
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/wandb_init.py", line 1539, in init
+    run = wi.init(run_settings, run_config, run_printer)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/wandb_init.py", line 804, in init
+    self._wl.finish_all_active_runs()
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/wandb_setup.py", line 167, in finish_all_active_runs
+    run.finish()
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/wandb_run.py", line 328, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/wandb_run.py", line 373, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/wandb_run.py", line 2298, in finish
+    self._finish(exit_code)
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/wandb_run.py", line 328, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/wandb_run.py", line 2317, in _finish
+    with telemetry.context(run=self) as tel:
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/telemetry.py", line 45, in __exit__
+    self._run._telemetry_callback(self._obj)
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/wandb_run.py", line 686, in _telemetry_callback
+    self._telemetry_flush()
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/wandb_run.py", line 699, in _telemetry_flush
+    self._interface._publish_telemetry(self._telemetry_obj)
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/interface/interface_shared.py", line 122, in _publish_telemetry
+    self._publish(rec)
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/interface/interface_sock.py", line 46, in _publish
+    self._asyncer.run(lambda: self._client.publish(request))
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 145, in run
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 314, in __step_run_and_handle_result
+    result = coro.send(None)
+             ^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 238, in _wrap
+    return await fn()
+           ^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/service/service_client.py", line 42, in publish
+    await self._send_server_request(request)
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/service/service_client.py", line 75, in _send_server_request
+    raise self._broken_exc.with_traceback(self._broken_tb)
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/service/service_client.py", line 84, in _send_server_request
+    await self._drain_writer()
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/service/service_client.py", line 92, in _drain_writer
+    await self._writer.drain()
+  File "/usr/lib/python3.12/asyncio/streams.py", line 392, in drain
+    await self._protocol._drain_helper()
+  File "/usr/lib/python3.12/asyncio/streams.py", line 166, in _drain_helper
+    raise ConnectionResetError('Connection lost')
+ConnectionResetError: Connection lost

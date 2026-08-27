@@ -1,0 +1,99 @@
+2026-08-27 15:07:02,308 INFO    MainThread:760003 [wandb_setup.py:_flush():81] Current SDK version is 0.29.0
+2026-08-27 15:07:02,308 INFO    MainThread:760003 [wandb_setup.py:_flush():81] Configure stats pid to 760003
+2026-08-27 15:07:02,308 INFO    MainThread:760003 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2026-08-27 15:07:02,308 INFO    MainThread:760003 [wandb_init.py:setup_run_log_directory():739] Logging user logs to /home/dimitria/PhD_codes/learning_on_the_fly/examples/state_hovering/wandb/run-20260827_150702-9se4i1bn/logs/debug.log
+2026-08-27 15:07:02,308 INFO    MainThread:760003 [wandb_init.py:setup_run_log_directory():740] Logging internal logs to /home/dimitria/PhD_codes/learning_on_the_fly/examples/state_hovering/wandb/run-20260827_150702-9se4i1bn/logs/debug-internal.log
+2026-08-27 15:07:02,308 INFO    MainThread:760003 [wandb_init.py:monkeypatch_ipython():658] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x7806740359d0>
+2026-08-27 15:07:02,309 INFO    MainThread:760003 [wandb_init.py:init():783] calling init triggers
+2026-08-27 15:07:02,309 INFO    MainThread:760003 [wandb_init.py:init():788] wandb.init called with sweep_config: {}
+config: {'seed': 10, 'num_continual_rounds': 10000, 'rollouts_per_collection_round': 256, 'dynamics_updates_per_round': 500, 'context_length': 20, 'dynamics_horizon': 110, 'latent_dim': 12, 'replay_batch_size': 128, 'dynamics_learning_rate': 0.0003, 'lambda_rec': 1e-07, 'lambda_mmd_max': 1e-05, 'mmd_kernel_sigma': 2.0, 'mmd_warmup_updates': 800, 'mmd_ramp_updates': 2500, 'residual_huber_delta': 1.0, 'policy_num_envs': 512, 'policy_updates_per_round': 1, 'policy_rollout_horizon': 250, 'policy_learning_rate': 0.001, 'policy_discount': 1.0, 'reward_huber_delta': 1.0, 'sim_dt': 0.02, 'control_delay': 0.04, '_wandb': {}}
+2026-08-27 15:07:02,309 INFO    MainThread:760003 [wandb_init.py:init():831] starting backend
+2026-08-27 15:07:02,309 INFO    MainThread:760003 [wandb_init.py:init():846] sending inform_init request
+2026-08-27 15:07:02,510 INFO    MainThread:760003 [wandb_init.py:init():851] backend started and connected
+2026-08-27 15:07:02,511 INFO    MainThread:760003 [wandb_run.py:_label_probe_notebook():1221] probe notebook
+2026-08-27 15:07:02,512 INFO    MainThread:760003 [wandb_init.py:init():921] updated telemetry
+2026-08-27 15:07:02,521 INFO    MainThread:760003 [wandb_init.py:init():944] communicating run to backend with 90.0 second timeout
+2026-08-27 15:07:02,933 INFO    MainThread:760003 [wandb_init.py:init():981] starting run threads in backend
+2026-08-27 15:07:03,012 INFO    MainThread:760003 [wandb_run.py:_console_start():2545] atexit reg
+2026-08-27 15:07:03,012 INFO    MainThread:760003 [wandb_run.py:_redirect():2395] redirect: wrap_raw
+2026-08-27 15:07:03,012 INFO    MainThread:760003 [wandb_run.py:_redirect():2464] Wrapping output streams.
+2026-08-27 15:07:03,012 INFO    MainThread:760003 [wandb_run.py:_redirect():2487] Redirects installed.
+2026-08-27 15:07:03,013 INFO    MainThread:760003 [wandb_init.py:init():1019] run started, returning control to user process
+2026-08-27 15:07:03,014 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:07:03,019 INFO    MainThread:760003 [jupyter.py:save_ipynb():368] [no run ID] not saving jupyter notebook
+2026-08-27 15:07:03,020 INFO    MainThread:760003 [wandb_init.py:_pre_run_cell_hook():613] [no run ID] pausing backend
+2026-08-27 15:07:03,513 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:07:03,519 INFO    MainThread:760003 [jupyter.py:save_ipynb():368] [no run ID] not saving jupyter notebook
+2026-08-27 15:07:03,519 INFO    MainThread:760003 [wandb_init.py:_pre_run_cell_hook():613] [no run ID] pausing backend
+2026-08-27 15:07:05,255 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:07:05,262 INFO    MainThread:760003 [jupyter.py:save_ipynb():368] [no run ID] not saving jupyter notebook
+2026-08-27 15:07:05,262 INFO    MainThread:760003 [wandb_init.py:_pre_run_cell_hook():613] [no run ID] pausing backend
+2026-08-27 15:07:08,465 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:07:08,471 INFO    MainThread:760003 [jupyter.py:save_ipynb():368] [no run ID] not saving jupyter notebook
+2026-08-27 15:07:08,471 INFO    MainThread:760003 [wandb_init.py:_pre_run_cell_hook():613] [no run ID] pausing backend
+2026-08-27 15:07:08,472 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:07:08,479 INFO    MainThread:760003 [jupyter.py:save_ipynb():368] [no run ID] not saving jupyter notebook
+2026-08-27 15:07:08,479 INFO    MainThread:760003 [wandb_init.py:_pre_run_cell_hook():613] [no run ID] pausing backend
+2026-08-27 15:07:08,482 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:07:08,490 INFO    MainThread:760003 [jupyter.py:save_ipynb():368] [no run ID] not saving jupyter notebook
+2026-08-27 15:07:08,490 INFO    MainThread:760003 [wandb_init.py:_pre_run_cell_hook():613] [no run ID] pausing backend
+2026-08-27 15:07:08,492 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:07:08,502 INFO    MainThread:760003 [jupyter.py:save_ipynb():368] [no run ID] not saving jupyter notebook
+2026-08-27 15:07:08,502 INFO    MainThread:760003 [wandb_init.py:_pre_run_cell_hook():613] [no run ID] pausing backend
+2026-08-27 15:07:08,505 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:07:08,519 INFO    MainThread:760003 [jupyter.py:save_ipynb():368] [no run ID] not saving jupyter notebook
+2026-08-27 15:07:08,519 INFO    MainThread:760003 [wandb_init.py:_pre_run_cell_hook():613] [no run ID] pausing backend
+2026-08-27 15:07:08,525 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:07:08,530 INFO    MainThread:760003 [jupyter.py:save_ipynb():368] [no run ID] not saving jupyter notebook
+2026-08-27 15:07:08,530 INFO    MainThread:760003 [wandb_init.py:_pre_run_cell_hook():613] [no run ID] pausing backend
+2026-08-27 15:07:08,531 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:07:08,544 INFO    MainThread:760003 [jupyter.py:save_ipynb():368] [no run ID] not saving jupyter notebook
+2026-08-27 15:07:08,544 INFO    MainThread:760003 [wandb_init.py:_pre_run_cell_hook():613] [no run ID] pausing backend
+2026-08-27 15:54:06,002 INFO    wandb-AsyncioManager-main:760003 [service_client.py:_forward_responses():122] [no run ID] Reached EOF.
+2026-08-27 15:54:06,002 INFO    wandb-AsyncioManager-main:760003 [mailbox.py:close():154] [no run ID] Closing mailbox, abandoning 2 handles.
+2026-08-27 15:54:06,002 ERROR   wandb-AsyncioManager-main:760003 [asyncio_manager.py:fn_wrap_exceptions():197] Uncaught exception in run_soon callback.
+Traceback (most recent call last):
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 195, in fn_wrap_exceptions
+    await fn()
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/run_messages.py", line 90, in loop
+    await asyncio_compat.race(
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 279, in race
+    async with open_task_group(race=True) as tg:
+  File "/usr/lib/python3.12/contextlib.py", line 217, in __aexit__
+    await anext(self.gen)
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 241, in open_task_group
+    await task_group._wait_all(race=race, timeout=exit_timeout)
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_compat.py", line 181, in _wait_all
+    raise exc
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 314, in __step_run_and_handle_result
+    result = coro.send(None)
+             ^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/run_messages.py", line 113, in _print_all
+    result = await handle.wait_async(timeout=None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/mailbox/mailbox_handle.py", line 127, in wait_async
+    response = await self._handle.wait_async(timeout=timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/mailbox/response_handle.py", line 123, in wait_async
+    raise HandleAbandonedError()
+wandb.sdk.mailbox.mailbox_handle.HandleAbandonedError
+2026-08-27 15:54:07,363 INFO    MainThread:760003 [wandb_init.py:_post_run_cell_hook():624] [no run ID] resuming backend
+2026-08-27 15:54:18,238 ERROR   wandb-AsyncioManager-main:760003 [asyncio_manager.py:fn_wrap_exceptions():197] Uncaught exception in run_soon callback.
+Traceback (most recent call last):
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/asyncio_manager.py", line 195, in fn_wrap_exceptions
+    await fn()
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/run_stopping.py", line 87, in loop
+    should_stop = await self._check_should_stop()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/run_stopping.py", line 115, in _check_should_stop
+    handle = await self._interface.deliver_async(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/interface/interface_sock.py", line 58, in deliver_async
+    handle = await self._client.deliver(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/lib/service/service_client.py", line 57, in deliver
+    handle = self._mailbox.require_response(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dimitria/venvs/diff-sim-env/lib/python3.12/site-packages/wandb/sdk/mailbox/mailbox.py", line 89, in require_response
+    raise MailboxClosedError()
+wandb.sdk.mailbox.mailbox.MailboxClosedError
