@@ -1,0 +1,42 @@
+# Continual policy-learning experiment configuration for figure-eight
+# trajectory tracking.
+
+continual_loop:
+  num_continual_rounds: 500
+  rollouts_per_collection_round: 256
+  max_collection_attempts_per_round: 10
+  dynamics_updates_per_round: 500
+  checkpoint_every_rounds: 25
+  initialize_vnd_from_pretrained_checkpoint: true
+  pretrained_vnd_checkpoint_name: traj_tracking_complete_mmd_best
+  # The pretrained checkpoint does not contain its replay samples/counts.
+  update_normalization_from_continual_buffer: false
+
+shared_context_dataset:
+  context_length: 20
+  dynamics_horizon: 110
+  latent_dim: 12
+  state_action_dim: 14
+  # Tracking predicts position, velocity, and local orientation corrections.
+  residual_dim: 9
+  replay_batch_size: 128
+  prior_evaluation_batch_size: 2048
+
+dynamics_optimization:
+  dynamics_learning_rate: 0.0003
+  lambda_rec: 0.0000001
+  lambda_mmd_max: 0.0001
+  mmd_kernel_sigma: 2.0
+  # Match the schedule used to train traj_tracking_complete_mmd.
+  mmd_warmup_updates: 4000
+  mmd_ramp_updates: 10000
+  residual_huber_delta: 1.0
+
+policy_optimization:
+  policy_num_envs: 512
+  policy_updates_per_round: 1
+  # Supplement A.5 uses 125 steps (2.5 s at 50 Hz) for tracking.
+  policy_rollout_horizon: 125
+  policy_learning_rate: 0.001
+  policy_discount: 1.0
+  reward_huber_delta: 1.0

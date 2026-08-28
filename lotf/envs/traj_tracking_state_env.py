@@ -1,5 +1,6 @@
 import csv
 from functools import partial
+from pathlib import Path
 from typing import Optional
 import numpy as np
 from matplotlib import pyplot as plt
@@ -35,6 +36,8 @@ class EnvState(env_base.EnvState):
         last_actions: history of actions used to simulate control latency.
         last_quadrotor_states: history of previous physical states.
         init_ref_traj_idx: starting index on the reference trajectory.
+        hidden_acceleration: constant world-frame wind acceleration for the episode.
+        latent_z: diagnostic CSV latent paired with the wind; never exposed in observations.
     """
     time: float
     step_idx: int
@@ -42,6 +45,8 @@ class EnvState(env_base.EnvState):
     last_actions: jax.Array
     last_quadrotor_states: QuadrotorState
     init_ref_traj_idx: int = 0
+    hidden_acceleration: jax.Array = jdc.field(default_factory=lambda: jnp.zeros(3))
+    latent_z: jax.Array = jdc.field(default_factory=lambda: jnp.zeros(12))
 
 
 class TrajTrackingStateEnv(env_base.Env[EnvState]):
@@ -64,6 +69,7 @@ class TrajTrackingStateEnv(env_base.Env[EnvState]):
         from_start=False,
         skip_start=False,
         train_from_start=False,
+        apply_hidden_acceleration=False,
     ):
         """Initialize the trajectory tracking environment."""
         self.world_box = WorldBox(
@@ -99,6 +105,18 @@ class TrajTrackingStateEnv(env_base.Env[EnvState]):
         self.hovering_action = jnp.array([thrust_hover, 0.0, 0.0, 0.0])
 
         self.num_last_quad_states = num_last_quad_states
+        self.apply_hidden_acceleration = apply_hidden_acceleration
+
+        table_path = Path(__file__).with_name("wind_z_table.csv")
+        wind_z_table = np.loadtxt(
+            table_path, delimiter=",", skiprows=1, dtype=np.float32
+        )
+        if wind_z_table.shape != (17, 15):
+            raise ValueError(
+                f"Expected a (17, 15) wind-z table, got {wind_z_table.shape}"
+            )
+        self.wind_z_table = jnp.asarray(wind_z_table)
+        self.num_wind_conditions = self.wind_z_table.shape[0]
 
         # load reference trajectory data
         ref_traj_obj = ReferenceTraj.from_name(ref_traj_name)
@@ -141,12 +159,22 @@ class TrajTrackingStateEnv(env_base.Env[EnvState]):
         self, key, state: Optional[EnvState] = None
     ) -> tuple[EnvState, jax.Array]:
         """Resets the environment to a sampled state on the reference trajectory."""
-        key_p, key_R, key_v, key_omega, key_dr = jax.random.split(key, 5)
+        (
+            key_start, key_p, key_R, key_v, key_omega, key_dr, key_wind
+        ) = jax.random.split(key, 7)
 
         # sample start index
         start_traj_idx = jax.random.randint(
-            key_p, shape=(), minval=self.min_init_ref_traj_idx, maxval=self.max_init_ref_traj_idx
+            key_start,
+            shape=(),
+            minval=self.min_init_ref_traj_idx,
+            maxval=self.max_init_ref_traj_idx,
         )
+
+        wind_index = jax.random.randint(
+            key_wind, shape=(), minval=0, maxval=self.num_wind_conditions
+        )
+        wind_z_pair = self.wind_z_table[wind_index]
 
         # 1. position sampling
         p_target = jnp.array(self.ref_traj[start_traj_idx, TrajColumns.POS.slice])
@@ -191,6 +219,8 @@ class TrajTrackingStateEnv(env_base.Env[EnvState]):
             last_actions=last_actions,
             last_quadrotor_states=last_quadrotor_states,
             init_ref_traj_idx=start_traj_idx,
+            hidden_acceleration=wind_z_pair[:3],
+            latent_z=wind_z_pair[3:],
         )
 
         obs = self._get_obs(state)
@@ -222,8 +252,13 @@ class TrajTrackingStateEnv(env_base.Env[EnvState]):
         dt_1 = self.delay - (self.num_last_actions - 2) * self.dt
         action_1 = last_actions[0]
         f_1, omega_1 = action_1[0], action_1[1:]
-        quadrotor_state = self.quadrotor.step(
-            state.quadrotor_state, f_1, omega_1, res_model_params, dt_1
+        quadrotor_state = self._step_dynamics_with_hidden_acceleration(
+            state.quadrotor_state,
+            f_1,
+            omega_1,
+            res_model_params,
+            state.hidden_acceleration,
+            dt_1,
         )
 
         # second integration step if needed to complete dt
@@ -231,8 +266,13 @@ class TrajTrackingStateEnv(env_base.Env[EnvState]):
             dt_2 = self.dt - dt_1
             action_2 = last_actions[1]
             f_2, omega_2 = action_2[0], action_2[1:]
-            quadrotor_state = self.quadrotor.step(
-                quadrotor_state, f_2, omega_2, res_model_params, dt_2
+            quadrotor_state = self._step_dynamics_with_hidden_acceleration(
+                quadrotor_state,
+                f_2,
+                omega_2,
+                res_model_params,
+                state.hidden_acceleration,
+                dt_2,
             )
 
         next_state = state.replace(
@@ -248,6 +288,27 @@ class TrajTrackingStateEnv(env_base.Env[EnvState]):
         truncated = jnp.greater_equal(next_state.step_idx, self.max_steps_in_episode)
 
         return EnvTransition(next_state, obs, reward, terminated, truncated, dict())
+
+    def _step_dynamics_with_hidden_acceleration(
+        self,
+        quadrotor_state: QuadrotorState,
+        thrust: jax.Array,
+        body_rates: jax.Array,
+        res_model_params: FrozenDict,
+        hidden_acceleration: jax.Array,
+        dt: jax.Array,
+    ) -> QuadrotorState:
+        """Applies the paper's episode-constant translational wind acceleration."""
+        next_quadrotor_state = self.quadrotor.step(
+            quadrotor_state, thrust, body_rates, res_model_params, dt
+        )
+        if not self.apply_hidden_acceleration:
+            return next_quadrotor_state
+        return next_quadrotor_state.replace(
+            p=next_quadrotor_state.p + 0.5 * hidden_acceleration * dt**2,
+            v=next_quadrotor_state.v + hidden_acceleration * dt,
+            acc=next_quadrotor_state.acc + hidden_acceleration,
+        )
 
     def _get_reward(
         self, last_state: EnvState, next_state: EnvState
